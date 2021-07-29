@@ -1,5 +1,4 @@
 
-
 pub struct Canvas{
     pub let width: UInt8;
     pub let height: UInt8;
@@ -85,7 +84,7 @@ pub fun main(){
 
     let framedPixelArray = createFrame(pixelArray: pixelArray)
 
-    let canvas = Canvas(width:7, height:7, pixels: serialise(pixelArray: framedPixelArray))
+    let canvas = Canvas(width:UInt8(framedPixelArray[0].length), height:UInt8(framedPixelArray.length), pixels: serialise(pixelArray: framedPixelArray))
 
     display(canvas: canvas)
     
