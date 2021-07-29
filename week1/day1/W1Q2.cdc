@@ -59,8 +59,7 @@ pub resource Printer {
         else{
             self.globalSet[canvas.pixels] = true;
             let picture <-create Picture(canvas: canvas)
-            destroy picture
-            return nil      
+            return <- picture   
         }
     }
 }
@@ -88,14 +87,14 @@ pub fun main(){
     let canvas2 = Canvas(width: 5, height: 5, pixels: serialise(pixelArray: pixelArray2))
 
     let printer <- create Printer({})
-    let print1 <- printer.print(canvas: canvas1)
-    let print2 <- printer.print(canvas: canvas2)
-    let print3 <- printer.print(canvas: canvas2)
+    let picture1 <- printer.print(canvas: canvas1)
+    let picture2 <- printer.print(canvas: canvas2)
+    let picture3 <- printer.print(canvas: canvas2)
+    
 
-
-    destroy print1;
-    destroy print2;
-    destroy print3;
+    destroy picture1;
+    destroy picture2;
+    destroy picture3;
     destroy printer
     
 }
