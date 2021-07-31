@@ -1,4 +1,5 @@
-
+pub contract Artist {
+  
 
 pub struct Canvas{
     pub let width: UInt8;
@@ -19,6 +20,28 @@ pub resource Picture {
     init(canvas: Canvas){
         self.canvas = canvas;
     }
+}
+
+pub resource Collection{
+
+    pub let picCollection: @[Picture]
+    init(){
+      self.picCollection <- []
+    }     
+    pub fun deposit(_ picture: @Picture) {
+        self.picCollection.append(<-picture)
+    }
+
+    destroy(){
+      destroy self.picCollection
+    }
+
+    
+}
+
+pub fun createCollection(): @Collection {
+    return <- create Collection()
+
 }
 
 
@@ -45,6 +68,7 @@ pub fun deserialise(pixelsAsString: String, breakPoint: UInt8): [String] {
 pub resource Printer {
 
     pub let globalSet:{String:Bool}
+
     init(){
         self.globalSet = {}
     }
@@ -64,39 +88,20 @@ pub resource Printer {
     }
 }
 
-pub fun main(){
-
-    let pixelArray1 = [
-        "*   *",
-        " * * ",
-        "  *  ",
-        " * * ",
-        "*   *"
-    ]
-
-    let pixelArray2 = [
-        "*   *",
-        " *** ",
-        " *** ",
-        " *** ",
-        "*   *"
-    ]
-
-    let canvas1 = Canvas(width: 5, height: 5, pixels: serialise(pixelArray: pixelArray1))
-
-    let canvas2 = Canvas(width: 5, height: 5, pixels: serialise(pixelArray: pixelArray2))
-
+init(){
+   
     let printer <- create Printer()
-    let picture1 <- printer.print(canvas: canvas1)
-    let picture2 <- printer.print(canvas: canvas2)
-    let picture3 <- printer.print(canvas: canvas2)
-    
+    //let collection <- create Collection()
 
-    destroy picture1;
-    destroy picture2;
-    destroy picture3;
-    destroy printer
+    self.account.save(<- printer, to: /storage/ArtistPicturePrinter)
+    //self.account.save(<- collection, to: /storage/ArtistCollection)
+
+    self.account.link<&Printer>(/public/ArtistPicturePrinter, target: /storage/ArtistPicturePrinter)
+    //self.account.link<&Collection>(/public/ArtistCollection, target: /storage/ArtistCollection)
     
+}
+
+ 
 }
 
  
