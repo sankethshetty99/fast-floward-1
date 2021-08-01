@@ -1,5 +1,8 @@
 pub contract Artist {
   
+pub event PicturePrintSuccess(pixels: String)
+pub event PicturePrintFailure(pixels: String)
+
 
 pub struct Canvas{
     pub let width: UInt8;
@@ -32,16 +35,16 @@ pub resource Collection{
         self.picCollection.append(<-picture)
     }
 
-    pub fun getCanvases(): [Canvas] {
-        var canvases:[Canvas] = []
+    pub fun getPixels(): [String] {
+        var pixels:[String] = []
         var index = 0
 
         while index <  self.picCollection.length{
-            canvases.append(self.picCollection[index].canvas)
+            pixels.append(self.picCollection[index].canvas.pixels)
             index=index+1
         }
 
-        return canvases
+        return pixels
     }
 
     destroy(){
@@ -90,11 +93,13 @@ pub resource Printer {
         let isPresent = self.globalSet[canvas.pixels] ?? false
         if(isPresent){
             log("Canvas already present")
+            emit PicturePrintFailure(pixels: canvas.pixels)
             return nil
         }
         else{
             self.globalSet[canvas.pixels] = true;
             let picture <-create Picture(canvas: canvas)
+            emit PicturePrintSuccess(pixels: canvas.pixels)
             return <- picture   
         }
     }
