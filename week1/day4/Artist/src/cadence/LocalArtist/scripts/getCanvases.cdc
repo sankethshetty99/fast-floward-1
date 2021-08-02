@@ -8,4 +8,5 @@ pub fun main(address: Address): [LocalArtist.Canvas] {
     ?? panic("Couldn't borrow Picture Receiver reference.")
 
   return pictureReceiverRef.getCanvases()
+  
 }
